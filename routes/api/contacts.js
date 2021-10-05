@@ -5,16 +5,21 @@ const {
   JoicontactSchema,
   updateFavoriteJoiSchema,
 } = require('../../models/contact')
-const { controllerWrapper, validation } = require('../../middlewares')
+const {
+  controllerWrapper,
+  validation,
+  authenticate,
+} = require('../../middlewares')
 
 const { contacts: ctrl } = require('../../controllers/')
 
-router.get('/', controllerWrapper(ctrl.listContacts))
+router.get('/', authenticate, controllerWrapper(ctrl.listContacts))
 
 router.get('/:contactId', controllerWrapper(ctrl.getContactById))
 
 router.post(
   '/',
+  authenticate,
   validation(JoicontactSchema),
   controllerWrapper(ctrl.addContact),
 )

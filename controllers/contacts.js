@@ -4,7 +4,11 @@ const { sendSuccessResponse } = require('../helpers')
 const { Contact } = require('../models')
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({}, '_id name email phone favorite')
+  const { _id } = req.user
+  const { favorite } = req.query
+  const result = await Contact.find(
+    favorite ? { owner: _id, favorite } : { owner: _id },
+  )
   sendSuccessResponse(res, { result })
 }
 
@@ -18,7 +22,8 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body)
+  const newContact = { ...req.body, owner: req.user._id }
+  const result = await Contact.create(newContact)
   sendSuccessResponse(res, { result }, 201)
 }
 
