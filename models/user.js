@@ -18,6 +18,9 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true },
 )
@@ -37,6 +40,10 @@ userSchema.methods.createToken = function () {
     _id: this._id,
   }
   return jwt.sign(payload, SECRET_KEY)
+}
+
+userSchema.methods.setAvatar = function (avatar) {
+  this.avatarURL = avatar
 }
 
 const joiSchema = Joi.object({

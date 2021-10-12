@@ -4,6 +4,7 @@ const {
   controllerWrapper,
   validation,
   authenticate,
+  upload,
 } = require('../../middlewares')
 const { auth: ctrl } = require('../../controllers')
 const router = express.Router()
@@ -12,6 +13,13 @@ router.post(
   '/register',
   validation(joiSchema),
   controllerWrapper(ctrl.register),
+)
+
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  controllerWrapper(ctrl.avatars),
 )
 
 router.post('/login', validation(joiSchema), controllerWrapper(ctrl.login))
